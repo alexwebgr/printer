@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 class Printer
-  def initialize
-  end
+  attr_reader :times
 
   def self.print(times = 100)
-    items = []
-    1.upto(times) { |i| items << bucket(i) }
-
-    "#{items.join("\n")}\n"
+    new(times).print
   end
 
-  def self.bucket(item)
+  private
+
+  def initialize(times)
+    @times = times
+  end
+
+  def bucket(item)
     return 'People Power' if power?(item) && people?(item)
     return 'People' if people?(item)
     return 'Power' if power?(item)
@@ -19,11 +21,17 @@ class Printer
     item
   end
 
-  def self.people?(item)
+  def people?(item)
     (item % 3).zero?
   end
 
-  def self.power?(item)
+  def power?(item)
     (item % 5).zero?
+  end
+
+  public
+
+  def print
+    (1..times).map { |i| bucket(i) }.join("\n") + "\n"
   end
 end
