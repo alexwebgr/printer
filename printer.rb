@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 class Printer
-  attr_reader :times
+  PHRASES = {
+    people_power: 'People Power',
+    people: 'People',
+    power: 'Power',
+    empty: 'The list empty'
+  }
 
   def self.print(times = 100)
     new(times).print
@@ -9,14 +14,16 @@ class Printer
 
   private
 
+  attr_reader :times
+
   def initialize(times)
     @times = times
   end
 
   def bucket(item)
-    return 'People Power' if power?(item) && people?(item)
-    return 'People' if people?(item)
-    return 'Power' if power?(item)
+    return PHRASES[:people_power] if power?(item) && people?(item)
+    return PHRASES[:people] if people?(item)
+    return PHRASES[:power] if power?(item)
 
     item
   end
@@ -32,6 +39,8 @@ class Printer
   public
 
   def print
-    (1..times).map { |i| bucket(i) }.join("\n") + "\n"
+    return PHRASES[:empty] if times.zero?
+
+    (1..times).map { |i| bucket(i) }.join("\n")
   end
 end
